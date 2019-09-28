@@ -1,3 +1,5 @@
+--- WORLD:
+
 --- 1. What's the population of the world ?
 
 select sum(Population) from country;
@@ -36,3 +38,22 @@ select name, count(*) from city group by name having count(*)> 2 ;
 --- 9. Find all the names of the districts in the Netherlands. (names should appear only once)
 
 select District As ' District Name of Netherlands' from city where CountryCode in (select Code from country where name = 'Netherlands');
+
+--- IMDB:
+
+--- 1. Find the minimum and the maximum age of the actors per gender.
+
+select fname,lname,age, gender  from actors where age = (select max(age) from  actors) union select fname,lname,age, gender  from actors where age = (select min(age) from  actors);
+
+--- 2. Find how many actors are in their 20’s, 30’s, 40’s, 50’s etc (grouped by decade).
+
+select floor(age/10)*10 "Actors are in their Decade", count(age) as "Number of Actors" from actors where floor(age/10)*10  > 20 or   floor(age/10)*10  > 30 or  floor(age/10)*10  > 40 or  floor(age/10)*10  > 50 group by floor(age/10)*10;
+
+--- 3. Print the names and biographies of the actors in this format “ANNE HATHAWAY BIO: 1 golden globe”
+---(comment,it is the other way to display , just to try)
+
+ select fname, lname, biography from actors\G;
+
+--- 4. Find the names of the directors who have more than 2 films in the database.
+select director, count(*) AS "Number of filmes" from films  group by director having count(director) > 2;
+
